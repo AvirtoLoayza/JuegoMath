@@ -1,0 +1,698 @@
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Press+Start+2P&family=Permanent+Marker&display=swap');
+
+/* ============================================= */
+/* Estilos Globales y Reseteo Básico             */
+/* ============================================= */
+body {
+    margin: 0;
+    overflow-x: hidden; /* Evita scroll horizontal */
+    font-family: 'Press Start 2P', cursive; /* Fuente principal para UI y botones */
+    color: #fff;
+    background: #000;
+    scroll-behavior: smooth; /* Para un scroll suave entre secciones */
+    cursor: url('../assets/images/ui/magic-cursor.png'), auto; /* Cursor personalizado, si tienes una imagen */
+}
+
+/* Selección de texto */
+::selection {
+    background: #FFD700;
+    color: #333;
+}
+
+/* ============================================= */
+/* Barra de Navegación (Header)                  */
+/* ============================================= */
+.header-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px; /* Un poco más alto */
+    background: rgba(10, 5, 20, 0.95); /* Azul muy oscuro, casi negro, con opacidad */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    box-sizing: border-box;
+    z-index: 1000; /* Asegura que esté por encima de todo */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    transition: background 0.3s ease-in-out;
+}
+
+.header-bar .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-bar .logo-icon {
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(2px 2px 5px rgba(255, 215, 0, 0.7));
+}
+
+.header-bar .logo-text {
+    font-family: 'Creepster', cursive; /* Fuente de título para el logo */
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #FFD700; /* Dorado brillante */
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+    letter-spacing: 2px;
+}
+
+.header-bar .main-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.header-bar .main-nav ul li {
+    margin-left: 35px;
+}
+
+.header-bar .main-nav ul li a {
+    color: #E0E0E0;
+    text-decoration: none;
+    font-family: 'Permanent Marker', cursive; /* Fuente narrativa para los enlaces */
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.header-bar .main-nav ul li a:hover {
+    color: #FF8C00; /* Naranja brillante al pasar el ratón */
+    transform: translateY(-2px);
+}
+
+.header-bar .main-nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: #FFD700;
+    transition: width 0.3s ease;
+}
+
+.header-bar .main-nav ul li a:hover::after {
+    width: 100%;
+}
+
+.nav-play-button {
+    background: linear-gradient(to bottom, #FFD700, #FFA500); /* Dorado a Naranja */
+    color: #8B4513; /* Marrón oscuro */
+    border: 3px solid #A0522D; /* Borde más robusto */
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.1em;
+    font-weight: bold;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.6);
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav-play-button:hover {
+    background: linear-gradient(to bottom, #FFA500, #FFD700);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.8);
+    animation: buttonPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes buttonPulse {
+    0% { transform: scale(1.02); box-shadow: 6px 6px 12px rgba(0,0,0,0.8); }
+    50% { transform: scale(1.05); box-shadow: 8px 8px 16px rgba(0,0,0,1); }
+    100% { transform: scale(1.02); box-shadow: 6px 6px 12px rgba(0,0,0,0.8); }
+}
+
+/* ============================================= */
+/* Secciones del Banner (Base Común)             */
+/* ============================================= */
+.banner-section {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden; /* Asegura que los elementos fuera de la vista estén ocultos */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    perspective: 1000px; /* Para efectos 3D si se necesitan */
+}
+
+/* ============================================= */
+/* Fondos Dinámicos: Cielo, Nubes, Islas         */
+/* ============================================= */
+.sky-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #87CEEB, #4682B4); /* Cielo azul degradado */
+    z-index: 0;
+}
+
+.cloud-layer {
+    position: absolute;
+    width: 300%; /* Para un movimiento más continuo */
+    height: 100%;
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    opacity: 0.8;
+    animation: moveClouds linear infinite;
+    z-index: 1;
+}
+
+.cloud-layer-1 {
+    background-image: url('../assets/images/background/clouds1.png');
+    top: 0;
+    animation-duration: 70s; /* Más lento */
+}
+
+.cloud-layer-2 {
+    background-image: url('../assets/images/background/clouds2.png');
+    top: 20%;
+    animation-duration: 50s; /* Más rápido que la capa 1 */
+    opacity: 0.6;
+}
+
+/* Nuevas capas de nubes para transiciones entre secciones */
+.cloud-layer-3 { /* Nubes más oscuras para Dragon Challenge */
+    background-image: url('../assets/images/background/clouds-dark.png'); /* Asume que tienes una imagen de nubes más oscuras */
+    top: 0;
+    animation-duration: 65s;
+    opacity: 0; /* Empieza oculto, se revela con JS */
+    transition: opacity 1s ease-in-out;
+}
+.cloud-layer-4 { /* Nubes místicas para Magic Guide */
+    background-image: url('../assets/images/background/clouds-misty.png'); /* Asume imagen de nubes místicas */
+    top: 10%;
+    animation-duration: 75s;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+.cloud-layer-5 { /* Nubes para Showcase */
+    background-image: url('../assets/images/background/clouds1.png'); /* Reutilizamos, o una nueva imagen */
+    top: 0;
+    animation-duration: 60s;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+
+@keyframes moveClouds {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); } /* Mueve el 100% del ancho del contenedor (300%) */
+}
+
+.floating-island {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation: floatIsland 10s ease-in-out infinite alternate;
+    filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.4));
+    z-index: 5;
+}
+
+.island-1 {
+    width: 350px; height: 250px;
+    background-image: url('../assets/images/background/island1.png');
+    top: 60%; left: 8%;
+    animation-duration: 12s; animation-delay: 0s;
+}
+.island-2 {
+    width: 450px; height: 300px;
+    background-image: url('../assets/images/background/island2.png');
+    top: 40%; right: 5%;
+    animation-duration: 10s; animation-delay: 2s;
+}
+.island-3 {
+    width: 280px; height: 180px;
+    background-image: url('../assets/images/background/island3.png');
+    bottom: 5%; left: 40%;
+    animation-duration: 9s; animation-delay: 1s;
+}
+.island-4 { /* Nueva isla */
+    width: 200px; height: 130px;
+    background-image: url('../assets/images/background/island4.png'); /* Asume que tienes island4.png */
+    top: 15%; left: 30%;
+    animation-duration: 11s; animation-delay: 3s;
+}
+.island-5 { /* Nueva isla */
+    width: 320px; height: 220px;
+    background-image: url('../assets/images/background/island5.png'); /* Asume que tienes island5.png */
+    bottom: 10%; right: 15%;
+    animation-duration: 13s; animation-delay: 0.5s;
+}
+.island-6 { /* Nueva isla */
+    width: 180px; height: 110px;
+    background-image: url('../assets/images/background/island6.png'); /* Asume que tienes island6.png */
+    top: 50%; left: 5%;
+    animation-duration: 9.5s; animation-delay: 2.5s;
+}
+
+@keyframes floatIsland {
+    0% { transform: translateY(0px) rotate(0.5deg); }
+    50% { transform: translateY(-20px) rotate(-0.5deg); }
+    100% { transform: translateY(0px) rotate(0.5deg); }
+}
+
+/* ============================================= */
+/* Elementos Persistentes: Burbujas y Rayos      */
+/* ============================================= */
+.persistent-element {
+    position: fixed; /* Se mantiene en la vista */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* Por defecto no bloquea clicks */
+    z-index: 50; /* Por encima del fondo, pero debajo del contenido principal */
+}
+
+#bubbles-container {
+    pointer-events: auto; /* Las burbujas sí deben ser clickeables */
+}
+
+/* Burbujas Mágicas */
+.magic-bubble {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle at 30% 30%, rgba(200, 230, 255, 0.7), rgba(100, 180, 255, 0.4)); /* Degradado más mágico */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(173, 216, 230, 0.7), inset 0 0 15px rgba(255,255,255,0.6); /* Sombra más pronunciada */
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out, background 0.2s ease-out, box-shadow 0.2s ease-out;
+    animation: freeFloatBubble linear infinite; /* Animación de movimiento global */
+    pointer-events: auto; /* Habilitar interacción con la burbuja */
+    filter: saturate(1.2) brightness(1.1);
+    transform-origin: center center;
+}
+
+.magic-bubble:hover {
+    transform: scale(1.15) rotate(5deg); /* Ligeramente más grande y rota */
+    background: radial-gradient(circle at 30% 30%, rgba(220, 240, 255, 0.8), rgba(120, 200, 255, 0.5));
+    box-shadow: 0 0 30px rgba(173, 216, 230, 1), inset 0 0 20px rgba(255,255,255,0.8);
+    filter: saturate(1.5) brightness(1.3);
+}
+
+.magic-bubble .bubble-text {
+    font-family: 'Press Start 2P', cursive;
+    text-shadow: 1px 1px 3px rgba(255,255,255,0.9);
+    color: #333;
+    transition: opacity 0.3s ease;
+}
+
+.magic-bubble .bubble-question {
+    font-size: 1.1em;
+    color: #000;
+    font-weight: normal;
+}
+
+.bubble-input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 100%; /* Ajuste para el input */
+}
+
+.bubble-input {
+    width: 80%;
+    padding: 8px;
+    border: 2px solid #555;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    color: #333;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1em;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.bubble-input:focus {
+    border-color: #FFD700;
+    box-shadow: 0 0 8px rgba(255,215,0,0.6);
+}
+
+.bubble-check-btn {
+    background: linear-gradient(to top, #4CAF50, #66BB6A); /* Verde */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.9em;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.bubble-check-btn:hover {
+    background: linear-gradient(to top, #66BB6A, #4CAF50);
+    transform: translateY(-1px);
+}
+
+.bubble.pop {
+    animation: bubblePop 0.3s forwards;
+}
+
+@keyframes freeFloatBubble {
+    0% {
+        transform: translate(0vw, 0vh) scale(1) rotate(0deg);
+        opacity: 0; /* Empieza invisible para un fade-in */
+    }
+    10% {
+        opacity: 1; /* Se vuelve visible */
+    }
+    25% {
+        transform: translate(20vw, -10vh) scale(1.05) rotate(5deg);
+    }
+    50% {
+        transform: translate(40vw, 15vh) scale(0.95) rotate(-5deg);
+    }
+    75% {
+        transform: translate(60vw, -5vh) scale(1.03) rotate(2deg);
+    }
+    100% {
+        transform: translate(80vw, 10vh) scale(1) rotate(0deg);
+        opacity: 0; /* Termina invisible para un fade-out suave */
+    }
+}
+
+@keyframes bubblePop {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+/* Rayos de Energía Mágica */
+.magic-ray {
+    position: absolute;
+    background: linear-gradient(to right, rgba(0,255,255,0.8), rgba(0,255,255,0)); /* Cian a transparente */
+    height: 8px; /* Más grueso */
+    filter: blur(3px); /* Más borroso */
+    opacity: 0;
+    animation: rayPulse 3s ease-out infinite;
+    z-index: 8; /* Bajo, para ser un efecto de fondo */
+    pointer-events: none; /* No deben ser clickeables */
+    border-radius: 5px;
+}
+
+@keyframes rayPulse {
+    0% { transform: translateX(-100%); opacity: 0; }
+    10% { opacity: 0.7; transform: translateX(0%); }
+    70% { opacity: 0.7; }
+    100% { transform: translateX(100vw); opacity: 0; }
+}
+
+/* ============================================= */
+/* Estilos Comunes de Personajes y Objetos       */
+/* ============================================= */
+.character {
+    position: absolute;
+    z-index: 20;
+    transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); /* Curva de transición más suave */
+}
+
+.character img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(8px 8px 10px rgba(0,0,0,0.6)); /* Sombra más fuerte */
+}
+
+/* Estilos para el texto de las secciones */
+.section-content {
+    position: absolute;
+    z-index: 60;
+    max-width: 55%; /* Un poco más ancho */
+    padding: 30px;
+    background: linear-gradient(to bottom right, rgba(0,0,0,0.85), rgba(20,0,40,0.85)); /* Fondo con degradado oscuro */
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.7), inset 0 0 10px rgba(255,255,255,0.1);
+    transform: scale(0.8) translateY(20px); /* Empieza más pequeño y abajo */
+    opacity: 0;
+    transition: all 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Efecto de "rebote" */
+    text-align: left;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.section-content.animate {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.section-content h2 {
+    font-family: 'Creepster', cursive;
+    font-size: 3em; /* Más grande */
+    color: #FFD700;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.8), 0 0 15px #FFEA00;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.section-content p {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.2em; /* Más legible */
+    line-height: 1.7;
+    color: #E0E0E0;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    margin-bottom: 15px;
+}
+
+.section-content.left {
+    left: 8%;
+    text-align: left;
+}
+
+.section-content.right {
+    right: 8%;
+    text-align: right;
+}
+
+.section-content.center {
+    left: 50%;
+    transform: translateX(-50%) scale(0.8) translateY(20px);
+    text-align: center;
+}
+.section-content.center.animate {
+    transform: translateX(-50%) scale(1) translateY(0);
+}
+
+/* Estilos de Botón General */
+.medieval-button {
+    background: linear-gradient(to bottom, #DAA520, #B8860B); /* Dorado más profundo */
+    color: #8B4513;
+    border: 5px solid #8B4513;
+    padding: 18px 35px;
+    border-radius: 12px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.8em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.7);
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative; /* Para posibles pseudo-elementos */
+    overflow: hidden;
+}
+
+.medieval-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.15); /* Efecto de brillo */
+    transform: skewX(-20deg);
+    transition: all 0.5s ease-out;
+}
+
+.medieval-button:hover::before {
+    left: 100%;
+}
+
+.medieval-button:hover {
+    background: linear-gradient(to bottom, #FFA500, #FF8C00);
+    border-color: #A0522D;
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 8px 8px 18px rgba(0,0,0,0.9);
+    animation: buttonVibrate 0.5s infinite alternate; /* VIBRACIÓN MÁS SUTUL */
+}
+
+@keyframes buttonVibrate {
+    0%, 100% { transform: scale(1.05) translateY(-5px) rotate(0deg); }
+    50% { transform: scale(1.06) translateY(-6px) rotate(0.5deg); }
+}
+
+/* ============================================= */
+/* Marcos de Recordatorio (Pistas/Contexto)      */
+/* ============================================= */
+.recordatorio-marco {
+    position: absolute;
+    width: 280px; /* Un poco más grande */
+    background: rgba(75, 0, 130, 0.9); /* Índigo oscuro base */
+    border: 5px solid #FFD700; /* Borde dorado */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.8), inset 0 0 10px rgba(255,255,255,0.2);
+    z-index: 70;
+    font-family: 'Permanent Marker', cursive;
+    text-align: center;
+    transform: scale(0) rotateY(90deg); /* Empieza colapsado y rotado */
+    opacity: 0;
+    transition: all 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto de "resorte" */
+}
+
+.recordatorio-marco.animate {
+    transform: scale(1) rotateY(0deg);
+    opacity: 1;
+}
+
+.recordatorio-marco h3 {
+    color: #FFEA00; /* Amarillo brillante */
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.5em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    letter-spacing: 1px;
+}
+
+.recordatorio-marco p {
+    color: #E6E6FA; /* Lavanda suave */
+    font-size: 1em;
+    line-height: 1.5;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Variaciones de posición para los marcos */
+.recordatorio-marco.top-right {
+    top: 90px;
+    right: 30px;
+}
+
+.recordatorio-marco.bottom-left {
+    bottom: 30px;
+    left: 30px;
+}
+
+.recordatorio-marco.top-left { /* Para la sección de la galería */
+    top: 90px;
+    left: 30px;
+}
+
+.recordatorio-marco.bottom-right {
+    bottom: 30px;
+    right: 30px;
+}
+
+/* Temas para los marcos (opcional, para variación visual) */
+.recordatorio-marco[data-theme="dark-magic"] {
+    background: linear-gradient(to bottom right, #360033, #0B0A11); /* Más oscuro */
+    border-color: #8A2BE2; /* Violeta */
+    box-shadow: 0 0 30px rgba(138,43,226,0.6);
+}
+
+.recordatorio-marco[data-theme="light-wisdom"] {
+    background: linear-gradient(to bottom right, #1A2A44, #0F1E2A); /* Azul más claro */
+    border-color: #00BFFF; /* Azul cielo */
+    box-shadow: 0 0 30px rgba(0,191,255,0.6);
+}
+
+.recordatorio-marco[data-theme="memory-glow"] {
+    background: linear-gradient(to bottom right, #503A00, #201800); /* Tono sepia/oro */
+    border-color: #FFC400;
+    box-shadow: 0 0 30px rgba(255,196,0,0.6);
+}
+
+.recordatorio-marco[data-theme="final-spark"] {
+    background: linear-gradient(to bottom right, #0A0A0A, #1A0A2A); /* Muy oscuro, casi portal */
+    border-color: #FF4500; /* Naranja fuego */
+    box-shadow: 0 0 40px rgba(255,69,0,0.8);
+}
+
+
+/* ============================================= */
+/* Indicador de Scroll Down                      */
+/* ============================================= */
+.scroll-down-indicator {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.1em;
+    z-index: 100;
+    opacity: 0.9;
+    animation: bounceUpDown 2s infinite ease-in-out;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+.scroll-down-indicator .arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 25px solid #fff;
+    margin-top: 15px;
+    animation: pulseArrow 1s infinite alternate; /* Efecto de pulso en la flecha */
+}
+
+@keyframes bounceUpDown {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-20px); } /* Mayor rebote */
+}
+
+@keyframes pulseArrow {
+    from { border-top-color: #fff; }
+    to { border-top-color: #FFD700; }
+}
+
+/* ============================================= */
+/* Clases de Utilidad y Efectos Generales        */
+/* ============================================= */
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* No interactuable cuando oculto */
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Animación inicial para elementos que aparecen con el primer scroll */
+.initial-animation {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+}
+.initial-animation.animate {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Animación de destello/brillo para elementos clave */
+@keyframes glowEffect {
+    0%, 100% { filter: brightness(1) drop-shadow(0 0 5px rgba(255,255,255,0.3)); }
+    50% { filter: brightness(1.2) drop-shadow(0 0 15px rgba(255,255,255,0.7)); }
+}
