@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horario de Clases</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f0f0f0;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .hora-col {
+            background-color: #b0c4de;
+            font-weight: bold;
+        }
+        .lunes, .miercoles {
+            background-color: #ffffcc;
+        }
+        .martes, .jueves {
+            background-color: #ffe8a1;
+        }
+        .viernes {
+            background-color: #d9ead3;
+        }
+        .clase {
+            padding: 10px;
+        }
+        .clase.color-amarillo {
+            background-color: #fff9c4;
+        }
+        .clase.color-naranja {
+            background-color: #ffdab9;
+        }
+        .clase.color-verde {
+            background-color: #d9ead3;
+        }
+        .clase.color-azul {
+            background-color: #e6f7ff;
+        }
+        .clase.color-rojo {
+            background-color: #ffe3e3;
+        }
+        .clase.color-purpura {
+            background-color: #f3e5f5;
+        }
+        .clase.color-celeste {
+            background-color: #e0f7fa;
+        }
+        .clase.mineria {
+            background-color: #ffecb3;
+        }
+        .clase.desarrollo {
+            background-color: #fff9c4;
+        }
+        .clase.proyectos {
+            background-color: #d9ead3;
+        }
+        .clase.computacion-moviles {
+            background-color: #e6f7ff;
+        }
+        .clase.sistemas-distribuidos {
+            background-color: #ffe0b2;
+        }
+        .clase.redes-computadoras {
+            background-color: #ffc4b2;
+        }
+        .clase.computacion-nube {
+            background-color: #ffdab9;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Horario de Clases</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>HORA</th>
+                <th>LUNES</th>
+                <th>MARTES</th>
+                <th>MIÉRCOLES</th>
+                <th>JUEVES</th>
+                <th>VIERNES</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="hora-col">7:00-8:00</td>
+                <td rowspan="2" class="clase desarrollo">
+                    Desarrollo de<br>
+                    Aplicaciones<br>
+                    multimedia305
+                </td>
+                <td rowspan="2" class="clase mineria">
+                    Mineria de datos 206
+                </td>
+                <td rowspan="2" class="clase desarrollo">
+                    Desarrollo de<br>
+                    Aplicaciones<br>
+                    multimedia305
+                </td>
+                <td rowspan="2" class="clase mineria">
+                    Mineria de datos 206
+                </td>
+                <td rowspan="2" class="clase proyectos">
+                    Proyectos Informaticos<br>
+                    303
+                </td>
+            </tr>
+            <tr>
+                <td class="hora-col">8:00-9:00</td>
+            </tr>
+            <tr>
+                <td class="hora-col">9:00-10:00</td>
+                <td rowspan="2" class="clase computacion-moviles">
+                    Computacion para<br>
+                    movbiles 306
+                </td>
+                <td rowspan="2" class="clase sistemas-distribuidos">
+                    sistemas distribuidos<br>
+                    305
+                </td>
+                <td rowspan="2" class="clase computacion-moviles">
+                    Computacion para<br>
+                    movbiles 306
+                </td>
+                <td rowspan="2" class="clase sistemas-distribuidos">
+                    sistemas distribuidos<br>
+                    305
+                </td>
+                <td class="clase mineria">
+                    Mineria de datos 206<br>
+                    Marleny peralta grupo A
+                </td>
+            </tr>
+            <tr>
+                <td class="hora-col">10:00-11:00</td>
+                <td class="clase computacion-moviles">
+                    Computacion para<br>
+                    movbiles 306
+                </td>
+            </tr>
+            <tr>
+                <td class="hora-col">11:00-12:00</td>
+                <td rowspan="2" class="clase redes-computadoras">
+                    Redes de computadoras<br>
+                    Gomez aiquupa ebert<br>
+                    306
+                </td>
+                <td></td>
+                <td rowspan="2" class="clase proyectos">
+                    Proyectos Informaticos<br>
+                    207
+                </td>
+                <td rowspan="2" class="clase redes-computadoras">
+                    Redes de computadoras<br>
+                    Gomez aiquupa ebert<br>
+                    305
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="hora-col">12:00-1:00</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="hora-col">1:00-2:00</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="hora-col">2:00-3:00</td>
+                <td></td>
+                <td rowspan="2" class="clase redes-computadoras">
+                    Redes de computadoras<br>
+                    Gomez aiquupa ebert<br>
+                    305
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="hora-col">3:00-4:00</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="hora-col">4:00-5:00</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="hora-col">5:00-6:00</td>
+                <td></td>
+                <td rowspan="2" class="clase computacion-nube">
+                    computacion en la nube<br>
+                    martinez duran virgilio<br>
+                    304
+                </td>
+                <td></td>
+                <td></td>
+                <td rowspan="2" class="clase computacion-nube">
+                    computacion en la nube<br>
+                    martinez duran virgilio<br>
+                    304
+                </td>
+            </tr>
+            <tr>
+                <td class="hora-col">6:00-7:00</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="hora-col">7:00-8:00</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
