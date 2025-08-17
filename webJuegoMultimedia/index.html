@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape del Dragón Matemático - La Aventura Interactiva</title>
+    <link rel="icon" href="assets/images/ui/favicon.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/section.css">
+    <link rel="stylesheet" href="css/multimedia-modal.css">
+
+    </head>
+<body>
+
+    <header class="header-bar">
+        <div class="logo">
+            <img src="assets/images/ui/dragon-logo.png" alt="Logo Dragón" class="logo-icon">
+            <span class="logo-text">MAGO MATEMATICO</span>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#intro-scene" data-nav-target="intro-scene">Inicio</a></li>
+                <li><a href="#dragon-challenge" data-nav-target="dragon-challenge">El Desafío</a></li>
+                <li><a href="#magic-guide-section" data-nav-target="magic-guide-section">La Guía</a></li>
+                <li><a href="#final-showcase-section" data-nav-target="final-showcase-section">Momentos</a></li>
+                <li><a href="#" class="multimedia-dropdown">Multimedia ▼</a></li>
+                <li><a href="#call-to-action-section" data-nav-target="call-to-action-section">A Jugar</a></li>
+            </ul>
+        </nav>
+        <button class="nav-play-button" onclick="window.location.href='../index.html'">¡JUGAR AHORA!</button>
+    </header>
+
+    <div id="bubbles-container" class="persistent-element"></div>
+    <div id="magic-rays-container" class="persistent-element"></div>
+
+    <section id="intro-scene" class="banner-section active-section">
+        <div class="sky-background"></div>
+        <div class="cloud-layer cloud-layer-1"></div>
+        <div class="cloud-layer cloud-layer-2"></div>
+        <div class="floating-island island-1"></div>
+        <div class="floating-island island-4"></div> <div id="dragon-intro-char" class="character dragon-intro hidden">
+            <img src="assets/images/characters/dragon2.gif" alt="Dragón Animado" class="dragon-image">
+            <div class="dragon-eye left-eye"></div>
+            <div class="dragon-eye right-eye"></div>
+            <div class="dragon-breath"></div> </div>
+
+        <div id="central-text-banner" class="initial-animation">
+            <h1 class="title">ESCAPE DEL DRAGÓN MATEMÁTICO</h1>
+            <p class="subtitle">¡Una aventura épica donde los números cobran vida!</p>
+            <p class="call-to-action-intro">Desplázate hacia abajo para desvelar el misterio...</p>
+        </div>
+
+        <div class="scroll-down-indicator">
+            <span>SCROLL</span>
+            <div class="arrow-down"></div>
+        </div>
+    </section>
+
+    <section id="dragon-challenge" class="banner-section">
+        <div class="section-background dragon-bg"></div>
+        <div class="cloud-layer cloud-layer-3"></div> <div class="floating-island island-2"></div>
+        <div class="floating-island island-5"></div> <div id="player-character" class="character player-challenge hidden">
+            <img src="assets/images/characters/jugadores.png" alt="Personaje Jugador Silueta" class="player-silhouette">
+            <div class="player-lantern"></div> <div class="player-aura"></div> </div>
+
+        <div class="section-content text-overlay left hidden">
+            <h2>El Desafío de los Números Mágicos</h2>
+            <p>El Dragón ha esparcido burbujas encantadas por todo el reino. Cada una encierra un enigma matemático. Solo al resolverlos, podrás avanzar.</p>
+            <p>Tu ingenio y rapidez serán tus mejores armas. ¿Estás listo para el reto?</p>
+            <div class="progress-bar-placeholder">
+                <span>Progreso: <span id="challenge-progress">0%</span></span>
+            </div>
+        </div>
+
+        <div class="recordatorio-marco top-right hidden" data-theme="dark-magic">
+            <h3>📜 Pergamino Antiguo</h3>
+            <p>La **suma** une fuerzas. La **resta** disipa engaños. La **multiplicación** forja poder. La **división** reparte sabiduría.</p>
+        </div>
+    </section>
+
+    <section id="magic-guide-section" class="banner-section">
+        <div class="section-background magic-bg"></div>
+        <div class="cloud-layer cloud-layer-4"></div> <div class="floating-island island-3"></div>
+        <div class="floating-island island-6"></div>
+
+        <div id="magic-guide-char" class="character guide-section-char hidden">
+            <img src="assets/images/characters/matematica.png" alt="Mago Guía Holográfico" class="guide-hologram">
+            <div class="guide-portal"></div> <div class="guide-dialogue"></div> </div>
+
+        <div class="section-content text-overlay right hidden">
+            <h2>La Sabiduría Ancestral Te Espera</h2>
+            <p>Un antiguo maestro de la luz, el Mago Elara, surge de los velos del tiempo. Sus palabras son hilos de conocimiento que te guiarán.</p>
+            <p>"Joven aventurero, la verdadera magia reside en la lógica y la claridad de tu mente."</p>
+            <button class="reveal-clue-button medieval-button">Ver Pista Secreta</button>
+        </div>
+
+        <div class="recordatorio-marco bottom-left hidden" data-theme="light-wisdom">
+            <h3>🌟 Orbe de la Claridad</h3>
+            <p>Recuerda: **El cero es el inicio de todo, el infinito es el camino sin fin.** Cada número, una estrella en tu constelación mental.</p>
+        </div>
+    </section>
+
+    <section id="final-showcase-section" class="banner-section">
+        <div class="section-background showcase-bg"></div>
+        <div class="cloud-layer cloud-layer-5"></div>
+
+        <div class="image-gallery-container hidden">
+            <div class="gallery-image-frame">
+                <img src="assets/images/showcase/dragonaccion.gif" alt="Momento 1" class="gallery-image active-image">
+                <div class="image-caption">Descubriendo los primeros enigmas.</div>
+            </div>
+            <div class="gallery-image-frame">
+                <img src="assets/images/showcase/momento2.jpg" alt="Momento 2" class="gallery-image">
+                <div class="image-caption">Cruzando el puente de los números.</div>
+            </div>
+            <div class="gallery-image-frame">
+                <img src="assets/images/showcase/momento3.jpg" alt="Momento 3" class="gallery-image">
+                <div class="image-caption">La batalla final de la lógica.</div>
+            </div>
+            <button class="gallery-nav-button prev-button">❮</button>
+            <button class="gallery-nav-button next-button">❯</button>
+        </div>
+
+        <div class="section-content text-overlay center hidden">
+            <h2>Nuestra Aventura en Imágenes</h2>
+            <p>Cada paso, un recuerdo. Cada desafío, una lección. Revive los momentos clave de esta épica travesía de conocimiento.</p>
+        </div>
+
+        <div class="recordatorio-marco top-left hidden" data-theme="memory-glow">
+            <h3>🖼️ Álbum de la Memoria</h3>
+            <p>Las experiencias son el verdadero tesoro. Cada imagen, una enseñanza.</p>
+        </div>
+    </section>
+
+
+    <section id="call-to-action-section" class="banner-section">
+        <div class="section-background final-bg"></div>
+        <div class="magic-portal-effect"></div> <div class="section-content text-overlay center hidden">
+            <h2>¡Tu Mente es Tu Única Salida!</h2>
+            <p>El destino de los reinos matemáticos descansa en tus manos. ¿Tienes el valor y la inteligencia para enfrentar al Dragón?</p>
+            <p>Prepárate para la aventura de tu vida. ¡La matemática nunca fue tan emocionante!</p>
+            <button id="hero-play-button" class="play-button medieval-button" onclick="window.location.href='../index.html'">¡EMPEZAR LA AVENTURA!</button>
+        </div>
+
+        <div class="recordatorio-marco bottom-right hidden" data-theme="final-spark">
+            <h3>✨ ¡El Futuro Te Llama!</h3>
+            <p>La valentía no es la ausencia de miedo, sino el triunfo sobre él. ¡Adelante, héroe!</p>
+        </div>
+    </section>
+
+    <audio id="bg-music" loop preload="auto">
+        <source src="assets/audio/music/epic-hero-moment.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    <audio id="dragon-roar-sfx" preload="auto">
+        <source src="assets/audio/sfx/dragon-roar.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    <audio id="bubble-pop-sfx" preload="auto">
+        <source src="assets/audio/sfx/bubble-pop.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    <audio id="magic-hum-sfx" preload="auto">
+        <source src="assets/audio/sfx/wizard-spell.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    <audio id="success-sfx" preload="auto">
+        <source src="assets/audio/sfx/success.mp3" type="audio/mpeg"> Tu navegador no soporta el elemento de audio.
+    </audio>
+    <audio id="fail-sfx" preload="auto">
+        <source src="assets/audio/sfx/fail.mp3" type="audio/mpeg"> Tu navegador no soporta el elemento de audio.
+    </audio>
+    <audio id="click-sfx" preload="auto">
+        <source src="assets/audio/sfx/button-click.mp3" type="audio/mpeg"> Tu navegador no soporta el elemento de audio.
+    </audio>
+
+
+
+
+
+    
+
+    <script src="js/script.js"></script>
+    <script src="js/interactions.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/multimedia-modal.js"></script> </body>
+</html>

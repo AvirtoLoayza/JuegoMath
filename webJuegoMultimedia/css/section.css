@@ -1,0 +1,579 @@
+/* ============================================= */
+/* SECCIÓN 1: INTRODUCCIÓN                       */
+/* ============================================= */
+#intro-scene {
+    background: linear-gradient(to bottom, #6A5ACD, #483D8B); /* Azul pizarra a violeta oscuro */
+}
+
+#intro-scene .sky-background {
+    background: linear-gradient(to bottom, #87CEEB, #4682B4); /* Cielo diurno por defecto */
+}
+
+#intro-scene #central-text-banner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 30;
+    filter: drop-shadow(0 0 15px rgba(0,0,0,0.9));
+    opacity: 0; /* Oculto por defecto, se anima con JS */
+    transition: all 1.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+#intro-scene #central-text-banner.animate {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.05); /* Ligeramente más grande al aparecer */
+}
+
+#intro-scene #central-text-banner .title {
+    font-family: 'Creepster', cursive;
+    font-size: 5.5em; /* Título muy grande */
+    color: #FF4500; /* Naranja rojizo fuerte */
+    text-shadow: 5px 5px 8px rgba(0,0,0,0.9), 0 0 30px #FFD700; /* Sombra y brillo dorados */
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+    animation: textGlow 2.5s ease-in-out infinite alternate;
+}
+
+#intro-scene #central-text-banner .subtitle {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.8em;
+    color: #FFE4B5; /* Melocotón suave */
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+#intro-scene #central-text-banner .call-to-action-intro {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2em;
+    color: #ADD8E6; /* Azul claro */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    animation: fadeInOut 2s infinite alternate;
+}
+
+@keyframes textGlow {
+    from { text-shadow: 5px 5px 8px rgba(0,0,0,0.9), 0 0 30px #FFD700; }
+    to { text-shadow: 6px 6px 10px rgba(0,0,0,1), 0 0 45px #FFEA00; }
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* Dragón de la Intro */
+#intro-scene #dragon-intro-char {
+    top: 10%;
+    right: -600px; /* Inicialmente muy fuera de pantalla */
+    width: 600px; /* Tamaño del dragón */
+    height: 380px;
+    transform: translateX(0);
+    transition: all 2s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Movimiento con rebote */
+    z-index: 40; /* Por encima de las nubes y algunas islas */
+}
+
+#intro-scene #dragon-intro-char.animate {
+    right: 5%; /* Posición final del dragón al entrar */
+    opacity: 1;
+    animation: dragonRoarAnimation 0.5s 0.8s forwards; /* Pequeño sacudida al "rugir" */
+}
+
+@keyframes dragonRoarAnimation {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(2deg); }
+    75% { transform: rotate(-2deg); }
+}
+
+.dragon-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Ojos del dragón (efecto de brillo) */
+.dragon-eye {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: radial-gradient(circle, #FFFF00, #FF4500);
+    border-radius: 50%;
+    box-shadow: 0 0 15px #FFFF00, 0 0 25px #FF4500;
+    animation: eyeGlow 1.5s infinite alternate;
+    z-index: 41;
+}
+.dragon-eye.left-eye { top: 35%; left: 30%; }
+.dragon-eye.right-eye { top: 35%; left: 45%; } /* Ajusta según la imagen del dragón */
+
+@keyframes eyeGlow {
+    from { box-shadow: 0 0 15px #FFFF00, 0 0 25px #FF4500; }
+    to { box-shadow: 0 0 25px #FFD700, 0 0 40px #FF6347; }
+}
+
+.dragon-breath {
+    position: absolute;
+    bottom: 20%;
+    left: 25%; /* Ajusta a la boca del dragón */
+    width: 150px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(255, 100, 0, 0.5) 0%, rgba(255, 0, 0, 0) 70%);
+    border-radius: 50%;
+    filter: blur(10px);
+    opacity: 0;
+    transform: scale(0);
+    animation: dragonBreath 2s ease-out forwards; /* Se activa con JS */
+    z-index: 39;
+}
+
+@keyframes dragonBreath {
+    0% { opacity: 0; transform: scale(0) translateY(0); }
+    20% { opacity: 0.8; transform: scale(1) translateY(-10px); }
+    100% { opacity: 0; transform: scale(1.5) translateY(-50px); }
+}
+
+
+/* ============================================= */
+/* SECCIÓN 2: EL DESAFÍO DEL HÉROE               */
+/* ============================================= */
+#dragon-challenge {
+    background: linear-gradient(to bottom, #1E002D, #0A0014); /* Noche oscura, tonos violeta */
+}
+
+.section-background.dragon-bg {
+    background-image: url('../assets/images/background/dragon-lair-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.6) grayscale(0.2); /* Más oscuro y con un toque de gris */
+    transition: filter 1s ease-in-out;
+}
+
+#dragon-challenge #player-character {
+    bottom: 10%;
+    left: 15%; /* Posición del jugador */
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+    transform: translateY(80px) rotateY(-30deg); /* Empieza abajo y girado */
+    transition: all 1.2s cubic-bezier(0.6, -0.28, 0.735, 0.045); /* Efecto de entrada */
+}
+
+#dragon-challenge #player-character.animate {
+    opacity: 1;
+    transform: translateY(0) rotateY(0deg);
+    animation: characterIdle 4s infinite alternate ease-in-out; /* Animación de reposo */
+}
+
+@keyframes characterIdle {
+    0%, 100% { transform: translateY(0px) rotateY(0deg); }
+    50% { transform: translateY(-10px) rotateY(2deg); }
+}
+
+.player-silhouette {
+    filter: drop-shadow(5px 5px 8px rgba(0,0,0,0.7));
+    transition: filter 0.5s ease;
+}
+
+/* Linterna del jugador */
+.player-lantern {
+    position: absolute;
+    bottom: 20%; /* Ajusta a la mano del jugador */
+    left: 70%;
+    width: 30px;
+    height: 40px;
+    background: gold;
+    border-radius: 50% 50% 10% 10%;
+    box-shadow: 0 0 20px 10px rgba(255,215,0,0.8), 0 0 30px 15px rgba(255,165,0,0.6); /* Brillo más intenso */
+    transform: scale(0);
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 21;
+}
+
+#dragon-challenge #player-character.animate .player-lantern {
+    transform: scale(1);
+}
+
+.player-aura {
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    top: -25%;
+    left: -25%;
+    filter: blur(15px);
+    animation: auraGlow 3s infinite alternate ease-in-out;
+    z-index: 19;
+}
+
+@keyframes auraGlow {
+    0%, 100% { transform: scale(1); opacity: 0.1; }
+    50% { transform: scale(1.1); opacity: 0.2; }
+}
+
+/* ============================================= */
+/* SECCIÓN 3: LA GUÍA MÁGICA                     */
+/* ============================================= */
+#magic-guide-section {
+    background: linear-gradient(to bottom, #100020, #05000A); /* Ambiente más místico y oscuro */
+}
+
+.section-background.magic-bg {
+    background-image: url('../assets/images/background/magic-forest-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.5) saturate(1.5); /* Más oscuro y vibrante */
+    transition: filter 1s ease-in-out;
+}
+
+#magic-guide-section #magic-guide-char {
+    top: 10%;
+    left: 10%;
+    width: 250px;
+    height: 350px;
+    opacity: 0;
+    transform: translateY(-80px) rotateX(90deg); /* Aparece rotando desde arriba */
+    transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 30;
+}
+
+#magic-guide-section #magic-guide-char.animate {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+    animation: guideFloat 5s infinite alternate ease-in-out;
+}
+
+@keyframes guideFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.guide-hologram {
+    filter: brightness(1.5) drop-shadow(0 0 20px rgba(0,255,255,0.9)); /* Más brillante */
+    animation: hologramGlow 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes hologramGlow {
+    from { filter: brightness(1.5) drop-shadow(0 0 20px rgba(0,255,255,0.9)); }
+    to { filter: brightness(1.8) drop-shadow(0 0 35px rgba(0,255,255,1)); }
+}
+
+.guide-portal {
+    position: absolute;
+    width: 180px; /* Más grande */
+    height: 180px;
+    background: radial-gradient(circle, rgba(0,255,255,0.8) 0%, rgba(0,255,255,0) 70%);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.8s ease-out;
+    z-index: -1;
+    filter: blur(10px);
+}
+
+#magic-guide-section #magic-guide-char.animate .guide-portal {
+    transform: translate(-50%, -50%) scale(1);
+    animation: portalPulse 3s infinite alternate;
+}
+
+@keyframes portalPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+}
+
+.guide-dialogue {
+    position: absolute;
+    bottom: -80px; /* Más abajo para no chocar */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.85);
+    color: #CCEEFF;
+    padding: 15px 25px;
+    border-radius: 12px;
+    white-space: nowrap;
+    font-size: 1.1em;
+    font-family: 'Permanent Marker', cursive;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,255,255,0.6);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    border: 1px solid rgba(0,255,255,0.3);
+}
+
+.guide-dialogue.visible {
+    opacity: 1;
+}
+
+.reveal-clue-button {
+    margin-top: 20px;
+}
+
+/* ============================================= */
+/* SECCIÓN 4: SHOWCASE DE MOMENTOS               */
+/* ============================================= */
+#final-showcase-section {
+    background: linear-gradient(to bottom, #001A00, #000A00); /* Tonos de verde oscuro, como un bosque antiguo */
+}
+
+.section-background.showcase-bg {
+    background-image: url('../assets/images/background/ancient-forest-bg.jpg'); /* Asume imagen de bosque antiguo */
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.4) saturate(0.8);
+    transition: filter 1s ease-in-out;
+}
+
+.image-gallery-container {
+    position: relative;
+    width: 60%; /* Ancho de la galería */
+    height: 70vh; /* Altura de la galería */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.7);
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.9);
+    overflow: hidden; /* Para las transiciones de imagen */
+    border: 5px solid #A9A9A9; /* Gris oscuro metálico */
+    transform: scale(0.8) translateY(50px);
+    opacity: 0;
+    transition: all 1.2s ease-out;
+    z-index: 50;
+}
+
+.image-gallery-container.animate {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.gallery-image-frame {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.gallery-image {
+    width: 100%;
+    height: 80%; /* Imagen más pequeña para dejar espacio a la descripción */
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.7);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.gallery-image.active-image {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.image-caption {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.1em;
+    color: #FFEFD5; /* Papaya Whip */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    margin-top: 15px;
+    background: rgba(0,0,0,0.6);
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-align: center;
+    opacity: 0; /* Controlado por JS junto con la imagen */
+    transition: opacity 0.8s ease;
+}
+
+.gallery-image.active-image + .image-caption {
+    opacity: 1;
+}
+
+.gallery-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    padding: 15px 10px;
+    font-size: 2em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    z-index: 60;
+}
+
+.gallery-nav-button:hover {
+    background: rgba(0,0,0,0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-button { left: 20px; }
+.next-button { right: 20px; }
+
+
+/* ============================================= */
+/* SECCIÓN 5: LLAMADA A LA ACCIÓN FINAL          */
+/* ============================================= */
+#call-to-action-section {
+    background: linear-gradient(to bottom, #000000, #10001A); /* Fondo negro a muy oscuro púrpura */
+}
+
+.section-background.final-bg {
+    background-image: url('../assets/images/background/final-portal-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.4) contrast(1.2); /* Más oscuro y con más contraste */
+    transition: filter 1s ease-in-out;
+}
+
+.magic-portal-effect {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(138,43,226,0.6) 0%, rgba(75,0,130,0) 70%); /* Violeta brillante a transparente */
+    border-radius: 50%;
+    filter: blur(50px);
+    animation: portalPulseGlow 4s infinite ease-in-out alternate;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0; /* Se activa con JS */
+    transition: all 1.5s ease-out;
+}
+.magic-portal-effect.animate {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+@keyframes portalPulseGlow {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+}
+
+#call-to-action-section .section-content.center {
+    opacity: 0;
+    transform: translateX(-50%) translateY(80px) scale(0.9);
+    transition: all 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+#call-to-action-section .section-content.center.animate {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+}
+
+#hero-play-button {
+    margin-top: 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s ease-out 0.8s; /* Retardo para aparecer después del texto */
+}
+
+#hero-play-button.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================= */
+/* RESPONSIVIDAD (Media Queries)                 */
+/* ============================================= */
+@media (max-width: 1200px) {
+    .header-bar { padding: 0 20px; }
+    .header-bar .logo-text { font-size: 1.8em; }
+    .header-bar .main-nav ul li { margin-left: 20px; }
+    .header-bar .main-nav ul li a { font-size: 1em; }
+    .nav-play-button { padding: 10px 20px; font-size: 0.9em; }
+
+    #intro-scene #central-text-banner .title { font-size: 4em; }
+    #intro-scene #central-text-banner .subtitle { font-size: 1.4em; }
+    #intro-scene #dragon-intro-char { width: 500px; height: 320px; }
+
+    .section-content { max-width: 65%; padding: 25px; }
+    .section-content h2 { font-size: 2.5em; }
+    .section-content p { font-size: 1.1em; }
+
+    .recordatorio-marco { width: 250px; padding: 15px; font-size: 0.9em; }
+    .recordatorio-marco h3 { font-size: 1.2em; }
+    .recordatorio-marco p { font-size: 0.9em; }
+
+    .medieval-button { font-size: 1.5em; padding: 15px 30px; }
+
+    .image-gallery-container { width: 70%; height: 60vh; }
+}
+
+@media (max-width: 992px) {
+    .header-bar { height: 60px; }
+    .header-bar .logo-text { font-size: 1.5em; }
+    .header-bar .main-nav { display: none; } /* Ocultar nav en tablets, usar un menú hamburguesa si es necesario */
+    .nav-play-button { font-size: 0.8em; padding: 8px 15px; }
+
+    #intro-scene #central-text-banner .title { font-size: 3em; }
+    #intro-scene #central-text-banner .subtitle { font-size: 1.1em; }
+    #intro-scene #dragon-intro-char { width: 400px; height: 250px; right: -400px; } /* Ajuste de posición inicial */
+
+    .section-content { max-width: 80%; padding: 20px; }
+    .section-content h2 { font-size: 2em; }
+    .section-content p { font-size: 1em; }
+
+    .recordatorio-marco { display: none; } /* Ocultar marcos en pantallas medianas para no saturar */
+    .medieval-button { font-size: 1.2em; padding: 12px 25px; }
+
+    .magic-bubble { width: 60px; height: 60px; font-size: 1em; }
+    .bubble-input-container { gap: 5px; padding: 8px; }
+    .bubble-input { width: 90%; padding: 6px; font-size: 0.9em; }
+    .bubble-check-btn { padding: 4px 8px; font-size: 0.8em; }
+
+    .image-gallery-container { width: 70%; height: 50vh; }
+    .gallery-nav-button { padding: 10px 5px; font-size: 1.8em; }
+}
+
+@media (max-width: 768px) {
+    .header-bar { justify-content: center; }
+    .header-bar .logo { margin-right: auto; } /* Mantiene el logo a la izquierda */
+    .nav-play-button { margin-left: auto; } /* Mantiene el botón a la derecha */
+
+    #intro-scene #central-text-banner .title { font-size: 2.5em; }
+    #intro-scene #central-text-banner .subtitle { font-size: 0.9em; }
+    #intro-scene #central-text-banner .call-to-action-intro { font-size: 0.9em; }
+    #intro-scene #dragon-intro-char { width: 300px; height: 190px; }
+    .dragon-eye { width: 15px; height: 15px; }
+    .dragon-breath { width: 100px; height: 60px; }
+
+    .section-content { max-width: 90%; padding: 15px; }
+    .section-content h2 { font-size: 1.8em; }
+    .section-content p { font-size: 0.9em; }
+
+    .medieval-button { font-size: 1em; padding: 10px 20px; }
+
+    .image-gallery-container { width: 90%; height: 40vh; }
+    .gallery-image { height: 70%; }
+    .image-caption { font-size: 0.9em; }
+    .gallery-nav-button { font-size: 1.5em; }
+}
+
+@media (max-width: 480px) {
+    .header-bar { padding: 0 10px; height: 50px; }
+    .header-bar .logo-text { font-size: 1.2em; }
+    .nav-play-button { font-size: 0.7em; padding: 6px 12px; }
+
+    #intro-scene #central-text-banner .title { font-size: 1.8em; }
+    #intro-scene #central-text-banner .subtitle { font-size: 0.8em; }
+    #intro-scene #central-text-banner .call-to-action-intro { font-size: 0.8em; }
+    #intro-scene #dragon-intro-char { width: 250px; height: 150px; }
+
+    .section-content { padding: 10px; }
+    .section-content h2 { font-size: 1.5em; }
+    .section-content p { font-size: 0.8em; }
+
+    .scroll-down-indicator { bottom: 20px; font-size: 0.9em; }
+    .scroll-down-indicator .arrow-down { border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 15px solid #fff; }
+
+    .image-gallery-container { width: 95%; height: 35vh; }
+    .gallery-image { height: 65%; }
+    .image-caption { font-size: 0.8em; padding: 5px 10px; }
+    .gallery-nav-button { font-size: 1.2em; }
+}
