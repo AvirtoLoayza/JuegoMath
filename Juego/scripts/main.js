@@ -7,11 +7,14 @@ let highscore = localStorage.getItem('mathMagicHighscore') || 0;
 let lives = 3;
 let correctAnswers = 0;
 let totalQuestions = 0;
+let timeLeft = 100; // Representa el tiempo y la posición del enemigo (100% = inicio, 0% = llegó al jugador)
+let enemySpeed = 0.5; // Velocidad base del enemigo
+let moveInterval = null; // Intervalo para mover al enemigo
+let questionActive = false; // Indica si hay una pregunta activa
 let currentAnswer = 0;
 let gameWon = false;
 let enemyPosition = 100; // Posición del enemigo (100 = derecha, 0 = izquierda)
 let playerPosition = 0; // Posición del jugador (izquierda fija)
-let enemySpeed = 0.5; // Velocidad de movimiento del enemigo (más lento)
 let enemyMoveInterval;
 let questionsAnswered = 0;
 let targetQuestions = 10; // Preguntas necesarias para ganar
@@ -215,10 +218,9 @@ function startBattle() {
   totalQuestions = 0;
   questionsAnswered = 0;
   gameWon = false;
-  enemyPosition = 100; // Enemigo empieza desde la derecha
-  playerPosition = 0; // Jugador fijo en la izquierda
+  timeLeft = 100; // Enemigo empieza desde la derecha
   
-  // Ajustar velocidad del enemigo según nivel (más lento)
+  // Ajustar velocidad del enemigo según nivel
   enemySpeed = selectedLevel * 0.3;
   
   // Actualizar UI
@@ -260,7 +262,7 @@ function showInstructions() {
   content.style.textAlign = 'center';
   content.style.fontFamily = "'Segoe UI', sans-serif";
   content.style.color = 'white';
-  content.style.cursor = 'pointer'; // para que el usuario sepa que se puede hacer clic
+  content.style.cursor = 'pointer';
 
   content.innerHTML = `
     <h2 style="color: #ffcc00;">🏰 ¡BIENVENIDO A LA BATALLA DE MATEMÁTICAS! 🏰</h2>
@@ -271,24 +273,20 @@ function showInstructions() {
     <p style="margin-bottom: 12px;">⚠️ Cada error acelera el avance del enemigo, ¡sé preciso!</p>
     <p style="margin-top: 20px; color: #eb4318ff; font-weight: bold;">🔥 ¡TOCA ESTE MARCO PARA COMENZAR! 🔥</p>
   `;
-  // Añadir el marco al overlay
+  
   overlay.appendChild(content);
   document.body.appendChild(overlay);
 
-  // Solo cerrar si se hace clic en el marco (no fuera)
   content.addEventListener('click', () => {
     document.body.removeChild(overlay);
-    iniciarJuego(); // Aquí empieza el juego
   });
 
-  // Evitar que el clic fuera del marco cierre el juego
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
-      // Ignora clics fuera del marco
+      document.body.removeChild(overlay);
     }
   });
 }
-
 
 // Configurar escena del juego
 function setupScene() {
@@ -311,16 +309,17 @@ function setupScene() {
     gameScene.style.backgroundImage = `url('${backgrounds[selectedLevel]}')`;
   }
   
-  // Configurar actor1 explícitamente
+  // Configurar personajes
   setupPlayerCharacter();
-  
-  // Configurar enemigo según nivel
   setupEnemyByLevel();
   
   // Animaciones diferentes según nivel
   if (selectedLevel === 3) {
     playerCharacter.classList.add('power-up');
   }
+  
+  // Posicionar personajes correctamente
+  positionCharacters();
 }
 
 // Configurar el personaje del jugador (actor1)
@@ -332,16 +331,14 @@ function setupPlayerCharacter() {
   
   // Agregar texto de fallback
   playerCharacter.innerHTML = '<div style="color: white; text-align: center; padding-top: 50px; font-size: 12px;">ACTOR1</div>';
-  
-  console.log('Actor1 configurado explícitamente');
 }
 
 // Configurar enemigo según el nivel
 function setupEnemyByLevel() {
   const enemies = {
-    1: 'images/malo.gif',    // Enemigo básico
-    2: 'images/malo2.gif',   // Enemigo intermedio
-    3: 'images/malo3.gif'    // Enemigo avanzado
+    1: 'images/malo.gif',
+    2: 'images/malo2.gif',
+    3: 'images/malo3.gif'
   };
   
   if (enemies[selectedLevel]) {
@@ -352,80 +349,92 @@ function setupEnemyByLevel() {
     
     // Agregar texto de fallback
     enemyCharacter.innerHTML = '<div style="color: white; text-align: center; padding-top: 50px; font-size: 12px;">ENEMIGO</div>';
-    
-    console.log('Enemigo configurado:', enemies[selectedLevel]); // Debug
   }
+}
+
+// Posicionar personajes correctamente
+function positionCharacters() {
+  // Jugador fijo en la izquierda
+  playerCharacter.style.position = 'absolute';
+  playerCharacter.style.left = '6vw';
+  playerCharacter.style.bottom = '8vh';
+  playerCharacter.style.width = '120px';
+  playerCharacter.style.height = '150px';
+  
+  // Enemigo empieza fuera de la pantalla a la derecha
+  enemyCharacter.style.position = 'absolute';
+  enemyCharacter.style.right = '-200px';
+  enemyCharacter.style.bottom = '8vh';
+  enemyCharacter.style.width = '120px';
+  enemyCharacter.style.height = '150px';
 }
 
 // Iniciar movimiento del enemigo
 function startEnemyMovement() {
-  clearInterval(enemyMoveInterval);
-  enemyMoveInterval = setInterval(() => {
-    if (gameWon || lives <= 0) {
-      clearInterval(enemyMoveInterval);
+  if (moveInterval) clearInterval(moveInterval);
+  
+  questionActive = true;
+  
+  // Asegurar que el enemigo esté en la posición inicial
+  enemyCharacter.style.right = '-200px';
+  enemyCharacter.classList.remove('enemy-active');
+  
+  // Forzar reflow
+  enemyCharacter.offsetHeight;
+  
+  // Configurar CSS variables para la animación
+  document.documentElement.style.setProperty('--enemy-duration', `${Math.max(5, 10 - enemySpeed)}s`);
+  
+  // Agregar clase para animación
+  enemyCharacter.classList.add('enemy-active');
+  
+  moveInterval = setInterval(() => {
+    if (!questionActive) {
+      clearInterval(moveInterval);
       return;
     }
     
-    // Mover enemigo hacia la izquierda (hacia el jugador)
-    enemyPosition -= enemySpeed;
+    // Reducir tiempo y actualizar barra de progreso
+    timeLeft -= enemySpeed;
+    enemyProgressBar.style.width = `${Math.max(0, timeLeft)}%`;
     
-    // Actualizar posición visual del enemigo
-    updateEnemyPosition();
-    
-    // Verificar si el enemigo llegó al jugador
-    if (enemyPosition <= playerPosition) {
+    // Verificar si el enemigo llegó al jugador (tiempo agotado)
+    if (timeLeft <= 0) {
       enemyReachedPlayer();
+      clearInterval(moveInterval);
     }
-  }, 50); // Actualizar más frecuentemente para movimiento más suave
+  }, 50);
 }
 
-// Actualizar posición visual del enemigo
-function updateEnemyPosition() {
-  // Calcular posición basada en el contenedor de pregunta
-  const questionContainer = document.querySelector('.question-container');
-  const containerRect = questionContainer.getBoundingClientRect();
-  const maxDistance = containerRect.width - 200; // Más espacio para movimiento
-  
-  // Mapear la posición del enemigo (100-0) a la distancia real
-  // 100 = derecha (más lejano), 0 = izquierda (cerca del jugador)
-  const position = ((100 - enemyPosition) / 100) * maxDistance;
-  enemyCharacter.style.left = `${80 + position}px`; // 80px es la posición inicial (más a la derecha)
-  
-  // Actualizar barra de progreso (invertida)
-  const progressPercent = ((100 - enemyPosition) / 100) * 100;
-  enemyProgressBar.style.width = `${Math.min(progressPercent, 100)}%`;
-}
-
-// Enemigo llegó al jugador
+// Enemigo llegó al jugador (colisión)
 function enemyReachedPlayer() {
-  clearInterval(enemyMoveInterval);
+  questionActive = false;
+  clearInterval(moveInterval);
   lives--;
   livesDisplay.textContent = lives;
   
-  // Reproducir sonido de ataque
+  // Animación de colisión
+  playerCharacter.style.animation = 'damage 0.5s';
+  enemyCharacter.style.animation = 'attack 0.5s';
+  
+  // Reproducir sonido de daño
   if (gameAudio) {
     gameAudio.currentTime = 0;
     gameAudio.play().catch(e => console.log('Error reproduciendo audio:', e));
   }
   
-  // Animación de ataque del enemigo
-  enemyCharacter.classList.add('attack');
-  playerCharacter.classList.add('damage');
+  // Mostrar feedback
+  showFeedback('¡Te han alcanzado!', `Te quedan ${lives} vidas`);
   
-  showFeedback('¡EL ENEMIGO TE ALCANZÓ!', `-1 vida. Te quedan ${lives} vidas`);
-  
+  // Después de la animación de daño
   setTimeout(() => {
-    enemyCharacter.classList.remove('attack');
-    playerCharacter.classList.remove('damage');
-    
+    playerCharacter.style.animation = '';
+    enemyCharacter.style.animation = '';
     if (lives <= 0) {
       endGame(false);
     } else {
-      // Resetear posición del enemigo
-      enemyPosition = 100;
-      updateEnemyPosition();
-      startEnemyMovement();
-      generateQuestion();
+      // Resetear para la siguiente pregunta
+      resetForNextQuestion();
     }
   }, 1500);
 }
@@ -454,7 +463,6 @@ function generateQuestion() {
   
   // Asegurar división válida
   if (selectedOperation === 'divide' || (selectedOperation === 'mixed' && operators.mixed === '÷')) {
-    // Hacer que la división sea exacta para simplificar
     num1 = num1 * num2;
   }
 
@@ -522,16 +530,22 @@ function generateAnswerOptions(correctAnswer, maxNumber) {
 // Verificar respuesta
 function checkAnswer(selectedAnswer) {
   const isCorrect = selectedAnswer === currentAnswer;
+  questionActive = false;
+  clearInterval(moveInterval);
   
   if (isCorrect) {
-    // Respuesta correcta
+    // Respuesta correcta - jugador ataca al enemigo
     score += selectedLevel * 10;
     correctAnswers++;
     questionsAnswered++;
     updateScore();
     
-    // Matar al enemigo
-    killEnemy();
+    // Animación de ataque del jugador
+    playerCharacter.style.animation = 'attack 0.5s';
+    enemyCharacter.style.animation = 'damage 0.5s';
+    
+    // Crear espada/proyectil
+    createSwordProjectile();
     
     // Temática infantil para aciertos
     const successMessages = [
@@ -552,15 +566,24 @@ function checkAnswer(selectedAnswer) {
     if (questionsAnswered >= targetQuestions) {
       setTimeout(() => {
         endGame(true);
-      }, 1500);
+      }, 2000);
       return;
     }
     
     // Actualizar progreso de preguntas
     questionsProgressDisplay.textContent = `${questionsAnswered}/${targetQuestions}`;
+    
+    // Resetear para la siguiente pregunta después de la animación
+    setTimeout(() => {
+      playerCharacter.style.animation = '';
+      enemyCharacter.style.animation = '';
+      resetForNextQuestion();
+    }, 1500);
+    
   } else {
-    // Respuesta incorrecta - el enemigo se acerca más rápido
-    enemySpeed += 0.2;
+    // Respuesta incorrecta - el enemigo se acerca más
+    enemySpeed += 0.2; // Aumentar velocidad del enemigo
+    timeLeft -= 20; // Penalización de tiempo
     
     // Temática infantil para errores
     const errorMessages = [
@@ -577,78 +600,81 @@ function checkAnswer(selectedAnswer) {
     const randomError = errorMessages[Math.floor(Math.random() * errorMessages.length)];
     showFeedback(randomError, `La respuesta era: ${currentAnswer}. ¡No te rindas! 💪`);
     
-    // Animación de daño
+    // Animación de daño al jugador
     playerCharacter.classList.add('damage');
-    setTimeout(() => playerCharacter.classList.remove('damage'), 500);
+    
+    setTimeout(() => {
+      playerCharacter.classList.remove('damage');
+      
+      if (timeLeft <= 0) {
+        enemyReachedPlayer();
+      } else {
+        // Continuar con el movimiento actual
+        questionActive = true;
+        startEnemyMovement();
+      }
+    }, 1000);
   }
-  
-  // Siguiente pregunta después de un breve retraso
-  setTimeout(nextQuestion, 1500);
 }
 
-// Matar al enemigo
-function killEnemy() {
-  // Animación de ataque del jugador (lanzar cuchillo)
-  playerCharacter.classList.add('attack');
+// Crear proyectil de espada
+function createSwordProjectile() {
+  const sword = document.createElement('div');
+  sword.className = 'sword-projectile';
+  sword.innerHTML = '⚔️';
   
-  // Crear efecto de cuchillo volador
-  createKnifeProjectile();
+  // Obtener la posición actual del jugador y enemigo
+  const playerRect = playerCharacter.getBoundingClientRect();
+  const enemyRect = enemyCharacter.getBoundingClientRect();
   
-  // Después de un breve retraso, el enemigo muere
-  setTimeout(() => {
-    enemyCharacter.classList.add('death');
-    createParticles(enemyCharacter);
-  }, 300);
-  
-  // Resetear posición del enemigo
-  setTimeout(() => {
-    enemyPosition = 100;
-    updateEnemyPosition();
-    enemyCharacter.classList.remove('death');
-    playerCharacter.classList.remove('attack');
-  }, 800);
-}
-
-// Crear efecto de cuchillo volador
-function createKnifeProjectile() {
-  const knife = document.createElement('div');
-  knife.className = 'knife-projectile';
-  knife.innerHTML = '🗡️';
-  knife.style.cssText = `
+  sword.style.cssText = `
     position: absolute;
-    font-size: 2rem;
+    font-size: 2.5rem;
     z-index: 15;
-    left: 180px;
-    bottom: 120px;
-    animation: knifeThrow 0.8s ease-out forwards;
+    left: ${playerRect.right}px;
+    top: ${playerRect.top + playerRect.height/2}px;
+    transform-origin: center center;
+    animation: swordThrow 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   `;
   
-  document.querySelector('.question-container').appendChild(knife);
+  document.body.appendChild(sword);
   
-  // Remover cuchillo después de la animación
+  // Efecto de impacto
   setTimeout(() => {
-    knife.remove();
+    const impact = document.createElement('div');
+    impact.style.cssText = `
+      position: absolute;
+      font-size: 3rem;
+      z-index: 16;
+      left: ${enemyRect.left}px;
+      top: ${enemyRect.top + enemyRect.height/2}px;
+      animation: impactEffect 0.5s forwards;
+    `;
+    impact.innerHTML = '💥';
+    document.body.appendChild(impact);
+    
+    setTimeout(() => impact.remove(), 500);
   }, 800);
+  
+  // Remover espada después de la animación
+  setTimeout(() => {
+    sword.remove();
+  }, 1000);
 }
 
-// Crear efectos de partículas
-function createParticles(element) {
-  const rect = element.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
+// Resetear para la siguiente pregunta
+function resetForNextQuestion() {
+  // Resetear posición del enemigo
+  enemyCharacter.style.right = '-200px';
+  enemyCharacter.classList.remove('enemy-active');
+  enemyProgressBar.style.width = '100%';
+  timeLeft = 100;
   
-  for (let i = 0; i < 10; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-    particle.style.left = centerX + 'px';
-    particle.style.top = centerY + 'px';
-    document.body.appendChild(particle);
-    
-    // Remover partícula después de la animación
-    setTimeout(() => {
-      particle.remove();
-    }, 2000);
-  }
+  // Generar nueva pregunta y reiniciar movimiento
+  setTimeout(() => {
+    generateQuestion();
+    startEnemyMovement();
+  }, 500);
 }
 
 // Mostrar feedback con temática infantil
@@ -656,7 +682,6 @@ function showFeedback(title, message) {
   feedbackTitle.textContent = title;
   feedbackMessage.textContent = message;
   
-  // Añadir estilos infantiles al feedback
   feedbackOverlay.style.cssText = `
     position: fixed;
     top: 0;
@@ -688,13 +713,14 @@ function showFeedback(title, message) {
   
   setTimeout(() => {
     feedbackOverlay.classList.add('hidden');
-  }, 1300);
+  }, 1500);
 }
 
 // Siguiente pregunta
 function nextQuestion() {
   if (lives <= 0 || gameWon) return;
-  generateQuestion();
+  
+  resetForNextQuestion();
 }
 
 // Actualizar puntuación
@@ -709,7 +735,7 @@ function updateScore() {
 
 // Terminar el juego
 function endGame(won) {
-  clearInterval(enemyMoveInterval);
+  clearInterval(moveInterval);
   gameWon = won;
   
   gameScreen.style.display = 'none';
@@ -741,16 +767,16 @@ function retryGame() {
 
 // Resetear juego
 function resetGame() {
-  clearInterval(enemyMoveInterval);
+  clearInterval(moveInterval);
   score = 0;
   lives = 3;
   correctAnswers = 0;
   totalQuestions = 0;
   questionsAnswered = 0;
   gameWon = false;
-  enemyPosition = 100;
-  playerPosition = 0;
+  timeLeft = 100;
   enemySpeed = 0.5;
+  questionActive = false;
 }
 
 // Mezclar array
@@ -764,7 +790,6 @@ function shuffleArray(array) {
 
 // Mostrar alerta
 function showAlert(message) {
-  // Implementación simple de alerta
   const alertBox = document.createElement('div');
   alertBox.className = 'custom-alert';
   alertBox.textContent = message;
@@ -792,7 +817,6 @@ function showAlert(message) {
 function showHint() {
   let hint = '';
   
-  // Generar pista según la operación
   const questionText = questionDisplay.textContent;
   const parts = questionText.split(' ');
   const num1 = parseInt(parts[0]);
@@ -816,7 +840,7 @@ function showHint() {
   
   showFeedback('PISTA', hint);
   
-  // Penalizar por usar pista - el enemigo se acerca más rápido
+  // Penalizar por usar pista
   enemySpeed += 0.3;
 }
 

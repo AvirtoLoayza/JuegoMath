@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Math Magic Battle</title>
   <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/game.css">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -53,7 +54,7 @@
             </button>
           </div>
         </div>
- <!-- Sección de selección de nivel -->
+        <!-- Sección de selección de nivel -->
         <div class="selection-section">
           <h3>NIVEL DE DIFICULTAD</h3>
           <div class="level-selector">
@@ -80,7 +81,7 @@
             </div>
           </div>
         </div>
- <!-- Botones del menú -->
+        <!-- Botones del menú -->
         <div class="menu-buttons">
           <button class="home-button" onclick="goHome()">
             <img src="images/hogar.png" alt="Inicio">
@@ -92,14 +93,6 @@
         </div>
       </div>
     </div>
-    <div id="game">
-  <!-- Jugador (izquierda) -->
-  <img id="player" src="img/panda.png" alt="Jugador">
-
-  <!-- Enemigo (derecha, se moverá con JavaScript) -->
-  <img id="enemy" src="img/enemigo.png" alt="Enemigo">
-</div>
-
 
     <!-- Pantalla de juego -->
     <div id="game-screen" class="game-screen" style="display: none;">
@@ -123,20 +116,25 @@
               <span id="questions-progress">0/10</span>
             </div>
             <button class="home-button" onclick="goHome()">
-            <img src="images/hogar.png" alt="Inicio">
-          </button>
+              <img src="images/hogar.png" alt="Inicio">
+            </button>
           </div>
         </div>
- <!-- Contenedor de preguntas y respuestas -->
-        <div class="question-container">
+        
+        <!-- Capa de actores -->
+        <div id="actors-layer">
           <div class="wizard-character animated" id="player-character"></div>
-          <div class="question-display" id="question-display"></div>
           <div class="enemy-character animated" id="enemy-character"></div>
+        </div>
+        
+        <!-- Contenedor de preguntas y respuestas -->
+        <div class="question-container">
+          <div class="question-display" id="question-display"></div>
         </div>
         <div class="answer-options" id="answer-options">
           <!-- Las opciones se generarán dinámicamente -->
         </div>
- <!-- Botones del juego pista -->
+        <!-- Botones del juego pista -->
         <div class="pista-buttons">
           <button class="hint-button" onclick="showHint()">
             <img src="images/ojo.png" alt="Pista" class="hint-icon">

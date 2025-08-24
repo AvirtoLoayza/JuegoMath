@@ -1,0 +1,256 @@
+/* Estilos del juego matemático */
+
+.game-screen {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Contenedor de actores */
+#actors-layer {
+    position: fixed;
+    bottom: 8vh;
+    left: 0;
+    right: 0;
+    height: 150px;
+    pointer-events: none;
+    z-index: 12;
+}
+
+/* Personaje del jugador - POSICIONADO A LA IZQUIERDA */
+#player-character {
+    position: absolute;
+    left: 6vw;
+    bottom: 0;
+    width: 120px;
+    height: 150px;
+    transform-origin: center bottom;
+    animation: floatAnimation 2s ease-in-out infinite;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+/* Enemigo - POSICIONADO FUERA DE LA PANTALLA A LA DERECHA */
+#enemy-character {
+    position: absolute;
+    right: -200px; /* COMIENZA FUERA DE LA PANTALLA */
+    bottom: 0;
+    width: 120px;
+    height: 150px;
+    transform-origin: center bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+/* Animación de entrada del enemigo - DE DERECHA A IZQUIERDA */
+@keyframes enemyEnter {
+    from {
+        right: -200px; /* COMIENZA MUY A LA DERECHA (FUERA DE PANTALLA) */
+    }
+    to {
+        right: 20vw; /* TERMINA CERCA DEL JUGADOR */
+    }
+}
+
+.enemy-active {
+    animation: enemyEnter 4s linear forwards;
+}
+
+/* Animación flotante para el jugador */
+@keyframes floatAnimation {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Animación de daño */
+@keyframes damage {
+    0%, 100% {
+        filter: none;
+        transform: translateX(0);
+    }
+    25%, 75% {
+        filter: brightness(1.5) saturate(1.5);
+        transform: translateX(-5px);
+    }
+    50% {
+        filter: brightness(1.5) saturate(1.5);
+        transform: translateX(5px);
+    }
+}
+
+/* Animación de ataque */
+@keyframes attack {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2) rotate(5deg);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Proyectil de espada */
+@keyframes swordThrow {
+    0% {
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(300px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.sword-projectile {
+    position: absolute;
+    font-size: 2rem;
+    z-index: 15;
+}
+
+/* Contenedor de preguntas */
+.question-container {
+    position: fixed !important;
+    top: 15% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 20;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.question-display {
+    font-size: 2.5em;
+    font-family: 'Comic Sans MS', cursive;
+    color: #6a11cb;
+    text-align: center;
+    margin: 20px 0;
+    text-shadow: 2px 2px 0px #fff;
+}
+
+.question-display .number {
+    font-size: 1.2em;
+    color: #ff6b6b;
+}
+
+.question-display .operator {
+    color: #4ecdc4;
+    margin: 0 15px;
+}
+
+.question-display .equals {
+    color: #45b7d1;
+    margin-left: 15px;
+}
+
+/* Opciones de respuesta */
+.answer-options {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 15;
+    width: 100%;
+    max-width: 600px;
+    justify-content: center;
+}
+
+.answer-options button {
+    font-size: 1.5em;
+    padding: 15px 30px;
+    border-radius: 15px;
+    border: 3px solid #6a11cb;
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Comic Sans MS', cursive;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.answer-options button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Barra de progreso del enemigo */
+.enemy-progress {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.enemy-progress-bar {
+    height: 100%;
+    background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+    transition: width 0.3s ease-out;
+}
+
+/* Overlay de feedback */
+.feedback-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.feedback-content {
+    background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 4px solid #fff;
+    animation: popIn 0.5s ease-out;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Estilos adicionales */
+.wizard-character, .enemy-character {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+/* Ocultar elementos innecesarios */
+.hidden {
+    display: none !important;
+}
